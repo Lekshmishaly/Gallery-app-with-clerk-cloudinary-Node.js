@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-// const errorMiddleware = require("./middleware/error");
+const errorMiddleware = require("./middleware/error");
 // const albumRoutes = require('./routes/album');
 // const imageRoutes = require('./routes/image');
 // const recycleBinRoutes = require('./routes/recycleBin');
@@ -48,7 +48,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // app.use('/api/recycle-bin', recycleBinRoutes);
 
 // Error Handling
-// app.use(errorMiddleware);
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
