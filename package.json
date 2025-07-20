@@ -1,0 +1,30 @@
+{
+  "name": "gallery-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
+    "cloudinary": "^2.7.0",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "mongoose": "^8.16.4",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
