@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const albumSchema = new mongoose.Schema({
   userId: {
-    // Clerk userId
     type: String,
     required: true,
     index: true,
@@ -18,10 +17,10 @@ const albumSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  deletedAt: {
-    // For soft delete
-    type: Date,
-    default: null,
+  status: {
+    type: String,
+    enum: ["active", "inactive", "deleted"],
+    default: "active",
   },
   createdAt: {
     type: Date,
@@ -33,4 +32,4 @@ const albumSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.Schema("Album", albumSchema);
+module.exports = mongoose.model("Album", albumSchema);

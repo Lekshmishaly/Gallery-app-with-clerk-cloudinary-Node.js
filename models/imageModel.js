@@ -1,40 +1,29 @@
 const mongoose = require("mongoose");
 
 const imageSchema = new mongoose.Schema({
-  userId: {
-    type: String,
-    required: true,
-    index: true,
-  },
   albumId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Album",
-    required: true,
   },
-  filename: {
+  file: {
+    filename: String,
+    size: Number,
+    mimeType: String,
+    cloudUrl: String,
+  },
+  status: {
     type: String,
-    required: true,
-  },
-  size: {
-    type: Number,
-    required: true,
-  },
-  mimeType: {
-    type: String,
-    required: true,
-  },
-  cloudUrl: {
-    type: String,
-    required: true,
-  },
-  deletedAt: {
-    type: Date,
-    default: null,
+    enum: ["active", "inactive", "deleted"],
+    default: "active",
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.Schema("Image", imageSchema);
+module.exports = mongoose.model("Image", imageSchema);

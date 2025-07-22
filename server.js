@@ -4,10 +4,9 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const protect = require("./middleware/auth");
 const errorMiddleware = require("./middleware/error");
-// const albumRoutes = require('./routes/album');
-// const imageRoutes = require('./routes/image');
-// const recycleBinRoutes = require('./routes/recycleBin');
+const sendResponse = require("./utils/response"); // make sure path is correct
 
 const app = express();
 
@@ -15,15 +14,6 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// DB connection
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
-
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Swagger Setup
 const swaggerOptions = {
@@ -35,17 +25,41 @@ const swaggerOptions = {
       description:
         "API for managing albums and images with Clerk authentication",
     },
-    servers: [{ url: `http://localhost:${process.env.PORT}` }],
+    servers: [{ url: `http://localhost:${process.env.PORT || 3000}` }],
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [{ BearerAuth: [] }],
   },
-  apis: ["./routes/*.js"],
+  apis: ["./src/routes/*.js"],
 };
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
-// app.use('/api/albums', albumRoutes);
-// app.use('/api/images', imageRoutes);
-// app.use('/api/recycle-bin', recycleBinRoutes);
+// Test Route
+app.get("/api/test-auth", protect, (req, res) => {
+  sendResponse(
+    res,
+    200,
+    { userId: req.user?.id },
+    "Authenticated successfully"
+  );
+});
+
+// DB connection
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Error Handling
 app.use(errorMiddleware);
